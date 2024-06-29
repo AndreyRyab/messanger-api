@@ -45,18 +45,45 @@ const io = new Server(httpServer, {
   withCredentials: true,
 });
 
-io.on('connection', socket => {
-  console.log(`User ${socket.id} connected`)
+const messageList = [];
 
-  socket.on('message', data => {
-      console.log(data)
-      io.emit('message', `${socket.id.substring(0, 5)}: ${data}`)
-  })
+const userMap = {};
+const updateUserMap = (socketId, user) => userMap[socketId] = user;
+
+io.on('connection', (socket) => {
+  console.log(`User ${socket.id} connected`);
+
+  io.emit('message:list', messageList);
   
-  socket.on('message:create', message => {
-      console.log('message:create:', message);
-      io.emit('message:created', message);
+  socket.on('message:create', (message) => {
+    updateUserMap(socket.id, message.user);
+
+    const isStatusMsg = ['CONNECTED', 'DISCONNECTED'].includes(message.text);
+
+    if (isStatusMsg) {
+      socket.broadcast.emit('message:created', message);
+
+      return; 
+    } else {
+      messageList.push(message);
+    }
+
+    io.emit('message:created', message);
   })
-})
+
+  socket.on('message:isTyping', (user) => {
+    socket.broadcast.emit('message:isTyping', user);
+  });
+
+  socket.on('disconnect', () => {
+    const message = {
+      date: Date.now(),
+      text: 'DISCONNECTED',
+      user: userMap[socket.id],
+    };
+
+    socket.broadcast.emit('message:created', message);
+  })
+});
 
 httpServer.listen(PORT, () => console.log(`Listening at port ${PORT}`));
