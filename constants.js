@@ -12,14 +12,15 @@ const ERROR_DATA_NOT_FOUND = 'Data not found';
 const SUCCESS_MESSAGE = 'Success';
 const SERVER_ERROR_CODE = 500;
 
-const EMAIL_REFEXP = /^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*\.[A-Za-z]{2,6}$/;
+const EMAIL_REGEXP =
+  /^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*\.[A-Za-z]{2,6}$/;
 
 module.exports = {
   ERROR_COMMON_MESSAGE,
   ERROR_BAD_REQUEST_MESSAGE,
   ERROR_CREDENTIALS_MESSAGE,
   ERROR_USER_NOT_FOUND,
-  EMAIL_REFEXP,
+  EMAIL_REGEXP,
   ERROR_EMAIL_MESSAGE,
 
   ERROR_PASSWORD_MESSAGE,

@@ -75,15 +75,7 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('message:created', message);
   
   socket.on('message:create', (message) => {
-    const isStatusMsg = ['CONNECTED', 'DISCONNECTED'].includes(message.text);
-
-    if (isStatusMsg) {
-      socket.broadcast.emit('message:created', message);
-
-      return; 
-    } else {
-      messageList.push(message);
-    }
+    messageList.push(message);
 
     io.emit('message:created', message);
   })
@@ -93,6 +85,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
+    if (io.sockets.sockets.size === 0) {
+      messageList.length = 0;
+    }
+
     const message = {
       date: Date.now(),
       text: 'DISCONNECTED',

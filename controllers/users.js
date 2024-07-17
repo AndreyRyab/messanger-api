@@ -10,14 +10,14 @@ const {
   SUCCESS_MESSAGE,
   ERROR_USER_NOT_FOUND,
   ERROR_COMMON_MESSAGE,
-  EMAIL_REFEXP,
+  EMAIL_REGEXP,
   ERROR_EMAIL_MESSAGE,
 } = require('../constants');
 
 const { JWT_SECRET } = process.env;
 
 module.exports.createUser = async (req, res) => {
-  const isEmail = EMAIL_REFEXP.test(req.body.email);
+  const isEmail = EMAIL_REGEXP.test(req.body.email);
 
   if (!isEmail) {
     res.status(401).send({ message: ERROR_EMAIL_MESSAGE });
