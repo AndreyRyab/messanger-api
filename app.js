@@ -59,6 +59,7 @@ const messageList = [];
 
 io.on('connection', (socket) => {
   console.log(`User ${socket.username} connected`);
+  console.log('messageList: ', messageList);
 
   socket.onAny((event, ...args) => {
     console.log('onAny: ', event, args);
@@ -87,6 +88,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (io.sockets.sockets.size === 0) {
       messageList.length = 0;
+      console.log('disconnect all users, messageList: ', messageList);
     }
 
     const message = {
